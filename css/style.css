@@ -482,4 +482,130 @@ body.dark .kpi-badge.positivo {
 
         min-width: 48px;
     }
+}/* ==========================================
+   TOOLTIP FINANCEIRO PREMIUM
+   ========================================== */
+
+#tooltipFinanceiro {
+    position: absolute;
+    z-index: 9999;
+    pointer-events: none;
+
+    opacity: 0;
+    transform: translateY(6px);
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+}
+
+.tooltip-financeiro {
+    min-width: 170px;
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    background: rgba(20, 22, 30, 0.96);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.22),
+        0 4px 12px rgba(0, 0, 0, 0.10);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.tooltip-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 7px;
+}
+
+.tooltip-ponto {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #6d5dfc;
+
+    box-shadow:
+        0 0 0 4px rgba(109, 93, 252, 0.14);
+}
+
+.tooltip-data {
+    color: #aeb4c2;
+
+    font-family: "Inter", Arial, sans-serif;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.tooltip-valor {
+    color: #ffffff;
+
+    font-family: "Inter", Arial, sans-serif;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.tooltip-legenda {
+    margin-top: 5px;
+
+    color: #7f8797;
+
+    font-family: "Inter", Arial, sans-serif;
+
+    font-size: 10px;
+    font-weight: 500;
+}
+
+
+/* ==========================================
+   TOOLTIP — MODO CLARO
+   ========================================== */
+
+body:not(.dark)
+#tooltipFinanceiro
+.tooltip-financeiro {
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border:
+        1px solid
+        rgba(20, 25, 40, 0.08);
+
+    box-shadow:
+        0 18px 45px
+        rgba(25, 30, 60, 0.15),
+
+        0 4px 12px
+        rgba(25, 30, 60, 0.06);
+}
+
+body:not(.dark)
+#tooltipFinanceiro
+.tooltip-data {
+    color: #737987;
+}
+
+body:not(.dark)
+#tooltipFinanceiro
+.tooltip-valor {
+    color: #171a21;
+}
+
+body:not(.dark)
+#tooltipFinanceiro
+.tooltip-legenda {
+    color: #8b92a3;
 }

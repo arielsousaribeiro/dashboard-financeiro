@@ -435,88 +435,182 @@ let grafico =
 
                     tooltip: {
 
-                        enabled:
-                            true,
+    enabled: false,
 
-                        backgroundColor:
-                            "rgba(20,22,30,0.96)",
+    external: function(context) {
 
-                        titleColor:
-                            "#ffffff",
+        const chart =
+            context.chart;
 
-                        bodyColor:
-                            "#d7d9e0",
-
-                        borderColor:
-                            "rgba(255,255,255,0.10)",
-
-                        borderWidth:
-                            1,
-
-                        padding:
-                            14,
-
-                        cornerRadius:
-                            12,
-
-                        caretSize:
-                            6,
-
-                        caretPadding:
-                            10,
-
-                        displayColors:
-                            false,
-
-                        titleFont: {
-
-                            family:
-                                "Inter",
-
-                            size:
-                                12,
-
-                            weight:
-                                "600"
-                        },
-
-                        bodyFont: {
-
-                            family:
-                                "Inter",
-
-                            size:
-                                14,
-
-                            weight:
-                                "600"
-                        },
+        const tooltip =
+            context.tooltip;
 
 
-                        callbacks: {
-
-                            title:
-                                function(context) {
-
-                                    return context[0].label;
-
-                                },
+        let elemento =
+            document.getElementById(
+                "tooltipFinanceiro"
+            );
 
 
-                            label:
-                                function(context) {
+        if (!elemento) {
 
-                                    return formatarMoeda(
-                                        context.parsed.y
-                                    );
+            elemento =
+                document.createElement(
+                    "div"
+                );
 
-                                }
+            elemento.id =
+                "tooltipFinanceiro";
 
-                        }
 
-                    }
+            elemento.innerHTML = `
 
-                },
+                <div class="tooltip-financeiro">
+
+                    <div class="tooltip-cabecalho">
+
+                        <span class="tooltip-ponto"></span>
+
+                        <span class="tooltip-data"></span>
+
+                    </div>
+
+                    <div class="tooltip-valor"></div>
+
+                    <div class="tooltip-legenda">
+                        Movimentação
+                    </div>
+
+                </div>
+
+            `;
+
+
+            document.body.appendChild(
+                elemento
+            );
+
+        }
+
+
+        if (
+            tooltip.opacity === 0
+        ) {
+
+            elemento.style.opacity =
+                "0";
+
+            elemento.style.transform =
+                "translateY(6px)";
+
+            return;
+
+        }
+
+
+        const ponto =
+            tooltip.dataPoints[0];
+
+
+        if (!ponto) {
+            return;
+        }
+
+
+        const valor =
+            ponto.parsed.y;
+
+        const label =
+            ponto.label;
+
+
+        elemento.querySelector(
+            ".tooltip-data"
+        ).textContent =
+            label;
+
+
+        elemento.querySelector(
+            ".tooltip-valor"
+        ).textContent =
+            formatarMoeda(valor);
+
+
+        const posicao =
+            chart.canvas.getBoundingClientRect();
+
+
+        let esquerda =
+            posicao.left +
+            window.scrollX +
+            tooltip.caretX;
+
+
+        let topo =
+            posicao.top +
+            window.scrollY +
+            tooltip.caretY -
+            92;
+
+
+        const largura =
+            180;
+
+
+        if (
+            esquerda + largura >
+            window.innerWidth
+        ) {
+
+            esquerda =
+                window.innerWidth -
+                largura -
+                20;
+
+        }
+
+
+        if (
+            esquerda < 20
+        ) {
+
+            esquerda =
+                20;
+
+        }
+
+
+        if (
+            topo < 20
+        ) {
+
+            topo =
+                posicao.top +
+                window.scrollY +
+                tooltip.caretY +
+                20;
+
+        }
+
+
+        elemento.style.left =
+            `${esquerda}px`;
+
+
+        elemento.style.top =
+            `${topo}px`;
+
+
+        elemento.style.opacity =
+            "1";
+
+
+        elemento.style.transform =
+            "translateY(0)";
+
+    }
+
+},
 
 
                 scales: {

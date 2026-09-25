@@ -98,7 +98,7 @@
 
                 <div class="kpi-topo">
 
-                    <span>
+                    <span id="rotuloMedia">
                         Média diária
                     </span>
 
@@ -112,7 +112,7 @@
                     R$ 0,00
                 </strong>
 
-                <p class="kpi-info">
+                <p class="kpi-info" id="infoMedia">
                     Média de movimentação
                 </p>
 
@@ -127,7 +127,7 @@
                         Crescimento
                     </span>
 
-                    <span class="kpi-badge positivo">
+                    <span class="kpi-badge positivo" id="badgeCrescimento">
                         +0%
                     </span>
 
@@ -137,7 +137,7 @@
                     +0,0%
                 </strong>
 
-                <p class="kpi-info">
+                <p class="kpi-info" id="infoCrescimento">
                     Comparação com período anterior
                 </p>
 
@@ -249,4 +249,6 @@
     <script src="js/script.js"></script>
 
 </body>
+
+</html>
 

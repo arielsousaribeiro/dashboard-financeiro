@@ -277,6 +277,12 @@ body {
     background: rgba(34, 197, 94, 0.12);
 }
 
+.kpi-badge.negativo {
+    color: #b91c1c;
+
+    background: rgba(239, 68, 68, 0.12);
+}
+
 
 /* =========================================
    CARD DO GRÁFICO
@@ -418,6 +424,12 @@ body.dark .kpi-badge.positivo {
     color: #4ade80;
 
     background: rgba(34, 197, 94, 0.12);
+}
+
+body.dark .kpi-badge.negativo {
+    color: #f87171;
+
+    background: rgba(239, 68, 68, 0.12);
 }
 
 

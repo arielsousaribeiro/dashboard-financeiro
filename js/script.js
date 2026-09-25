@@ -23,7 +23,13 @@ const dados = {
             690,
             920,
             1100
-        ]
+        ],
+
+        anterior: 4120,
+
+        rotuloMedia: "Média por intervalo",
+
+        infoMedia: "Média a cada 2 horas"
     },
 
     "7D": {
@@ -45,7 +51,13 @@ const dados = {
             1620,
             2100,
             1950
-        ]
+        ],
+
+        anterior: 12850,
+
+        rotuloMedia: "Média diária",
+
+        infoMedia: "Média por dia"
     },
 
     "1M": {
@@ -75,7 +87,13 @@ const dados = {
             6800,
             7900,
             8400
-        ]
+        ],
+
+        anterior: 54300,
+
+        rotuloMedia: "Média por intervalo",
+
+        infoMedia: "Média a cada 3 dias"
     },
 
     "1A": {
@@ -107,7 +125,13 @@ const dados = {
             36100,
             38900,
             42100
-        ]
+        ],
+
+        anterior: 298400,
+
+        rotuloMedia: "Média mensal",
+
+        infoMedia: "Média por mês"
     },
 
     "Tudo": {
@@ -125,7 +149,13 @@ const dados = {
             184000,
             245000,
             318000
-        ]
+        ],
+
+        anterior: 642000,
+
+        rotuloMedia: "Média anual",
+
+        infoMedia: "Média por ano"
     }
 
 };
@@ -150,22 +180,96 @@ const mediaDiaria =
 const crescimento =
     document.getElementById("crescimento");
 
+const rotuloMedia =
+    document.getElementById("rotuloMedia");
+
+const infoMedia =
+    document.getElementById("infoMedia");
+
+const badgeCrescimento =
+    document.getElementById("badgeCrescimento");
+
+const infoCrescimento =
+    document.getElementById("infoCrescimento");
+
 const botaoTema =
     document.getElementById("botaoTema");
 
 
 // ==========================================
-// FORMATAÇÃO DE MOEDA
+// FORMATAÇÃO — pt-BR
 // ==========================================
 
-function formatarMoeda(valor) {
-
-    return valor.toLocaleString(
+const formatadorMoeda =
+    new Intl.NumberFormat(
         "pt-BR",
         {
             style: "currency",
             currency: "BRL"
         }
+    );
+
+
+const formatadorCompacto =
+    new Intl.NumberFormat(
+        "pt-BR",
+        {
+            notation: "compact",
+            compactDisplay: "short",
+            maximumFractionDigits: 1
+        }
+    );
+
+
+const formatadorPercentual =
+    new Intl.NumberFormat(
+        "pt-BR",
+        {
+            style: "percent",
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+            signDisplay: "always"
+        }
+    );
+
+
+const formatadorPercentualSimples =
+    new Intl.NumberFormat(
+        "pt-BR",
+        {
+            style: "percent",
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1
+        }
+    );
+
+
+function formatarMoeda(valor) {
+
+    return formatadorMoeda.format(valor);
+
+}
+
+
+function formatarMoedaCompacta(valor) {
+
+    return "R$ " +
+        formatadorCompacto.format(valor);
+
+}
+
+
+function formatarPercentual(razao) {
+
+    return formatadorPercentual.format(razao);
+
+}
+
+
+function formatarPercentualAbsoluto(razao) {
+
+    return formatadorPercentualSimples.format(
+        Math.abs(razao)
     );
 
 }
@@ -610,8 +714,9 @@ let grafico =
 
     }
 
-},
+}
 
+                },
 
                 scales: {
 
@@ -718,36 +823,9 @@ let grafico =
                             callback:
                                 function(valor) {
 
-                                    if (
-                                        valor >= 1000000
-                                    ) {
-
-                                        return "R$ " +
-                                            (
-                                                valor /
-                                                1000000
-                                            ).toFixed(1) +
-                                            "M";
-
-                                    }
-
-
-                                    if (
-                                        valor >= 1000
-                                    ) {
-
-                                        return "R$ " +
-                                            (
-                                                valor /
-                                                1000
-                                            ).toFixed(1) +
-                                            "k";
-
-                                    }
-
-
-                                    return "R$ " +
-                                        valor;
+                                    return formatarMoedaCompacta(
+                                        valor
+                                    );
 
                                 }
 
@@ -774,7 +852,14 @@ let grafico =
 // ATUALIZAR OS INDICADORES
 // ==========================================
 
-function atualizarKPIs(valores) {
+function atualizarKPIs(periodo) {
+
+    const conjunto =
+        dados[periodo];
+
+    const valores =
+        conjunto.valores;
+
 
     const total =
         valores.reduce(
@@ -800,39 +885,63 @@ function atualizarKPIs(valores) {
         formatarMoeda(media);
 
 
-    let crescimentoValor =
+    rotuloMedia.textContent =
+        conjunto.rotuloMedia;
+
+    infoMedia.textContent =
+        conjunto.infoMedia;
+
+
+    const anterior =
+        conjunto.anterior;
+
+
+    let razao =
         0;
 
 
-    if (valores.length > 1) {
+    if (anterior > 0) {
 
-        crescimentoValor =
-            (
-                (
-                    valores[valores.length - 1]
-                    -
-                    valores[0]
-                )
-                /
-                valores[0]
-            )
-            *
-            100;
+        razao =
+            (total - anterior) /
+            anterior;
 
     }
 
 
-    crescimento.textContent =
+    const subindo =
+        razao >= 0;
 
+
+    crescimento.textContent =
+        formatarPercentual(razao);
+
+
+    badgeCrescimento.textContent =
         (
-            crescimentoValor >= 0
-                ? "+"
-                : ""
+            subindo
+                ? "↑ "
+                : "↓ "
         )
         +
-        crescimentoValor.toFixed(1)
-        +
-        "%";
+        formatarPercentualAbsoluto(razao);
+
+
+    badgeCrescimento.classList.toggle(
+        "positivo",
+        subindo
+    );
+
+    badgeCrescimento.classList.toggle(
+        "negativo",
+        !subindo
+    );
+
+
+    infoCrescimento.textContent =
+        "vs. " +
+        formatarMoeda(anterior) +
+        " no período anterior";
 
 }
 
@@ -889,7 +998,7 @@ botoesFiltro.forEach(
 
 
                 atualizarKPIs(
-                    novoDados.valores
+                    periodo
                 );
 
             }
@@ -972,5 +1081,5 @@ canvas.addEventListener(
 // ==========================================
 
 atualizarKPIs(
-    dados["1D"].valores
+    "1D"
 );
